@@ -1,0 +1,36 @@
+﻿@model IPagedList<MVCBackendIliyan.Models.Forum>
+@using PagedList;
+
+@{
+    ViewBag.Title = "Forum";
+}
+
+@Styles.Render("~/css/autocomplete")
+
+<div class="home">
+    <div class="home-text home-info">
+        <h3>Forum</h3><br /><br />
+        @if (Request.IsAuthenticated)
+        {
+        <h4>If you want to write something, you are on the right place!</h4>
+        }
+        else
+        {
+        <h4>You need to login to add comment!</h4>
+        }
+
+        <br /><br />
+    </div>
+    @Html.Partial("~/Views/Forum/_PartialIndex.cshtml")
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js "></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js "></script>
+@Scripts.Render("~/bundles/jqueryunob")
+@Scripts.Render("~/js/autocomplete")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#searchBy").autocomplete({
+            source: '@Url.Action("GetForumStuff")'
+        });
+    });
+</script>

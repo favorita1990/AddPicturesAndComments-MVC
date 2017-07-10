@@ -1,0 +1,43 @@
+﻿@model MVCBackendIliyan.Models.Forum
+
+
+<div id="ajaxAddCommentOrDeleteId">
+    <script type="text/javascript">
+        document.title = 'Change Comment';
+        window.history.pushState(
+            null,
+            null,
+            '/Forum/Edit/@Model.Id'
+            );
+    </script>
+    @if (Request.IsAuthenticated)
+    {
+        using (Ajax.BeginForm("Edit", "Forum", new { id = Model.Id }, new AjaxOptions()
+        {
+            UpdateTargetId = "ajaxAddCommentOrDeleteId",
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "Post"
+        },
+                                                                            new { @class = "form-inline", role = "form" }))
+        {
+
+        <textarea type="text" name="text" class="form-control" rows="3" cols="40">@Model.Comment</textarea><br />
+        <div class="row">
+            <div class="col-xs-8 col-sm-2 col-md-2">
+                <button type="submit" class="btn btn-success" id="btn-add">Change</button>
+            </div>
+            <div class="col-xs-4 col-sm-10 col-md-10">
+                <button type="submit" class="btn btn-warning pull-left">
+                    @Ajax.ActionLink("Back", "PartialIndex",
+new AjaxOptions
+{
+    UpdateTargetId = "ajaxAddCommentOrDeleteId",
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "Get"
+})
+                </button>
+            </div>
+        </div>
+        }
+    }
+            </div>

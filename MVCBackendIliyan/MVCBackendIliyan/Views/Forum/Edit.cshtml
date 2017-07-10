@@ -1,0 +1,67 @@
+﻿@model MVCBackendIliyan.Models.Forum
+
+@{
+    ViewBag.Title = "Change Comment";
+}
+
+@Styles.Render("~/css/autocomplete")
+
+<div class="home">
+    <div class="home-text home-info">
+        <h3>Forum</h3><br /><br />
+        @if (Request.IsAuthenticated)
+        {
+        <h4>If you want to write something, you are on the right place!</h4>
+        }
+        else
+        {
+        <h4>You need login to add comment!</h4>
+        }
+
+        <br /><br />
+    </div>
+    <div id="ajaxAddCommentOrDeleteId">
+
+        @if (Request.IsAuthenticated)
+            {
+                using (Ajax.BeginForm("Edit", "Forum", new { id = Model.Id }, new AjaxOptions()
+                {
+                    UpdateTargetId = "ajaxAddCommentOrDeleteId",
+                    InsertionMode = InsertionMode.Replace,
+                    HttpMethod = "Post"
+                },
+                                                                                    new { @class = "form-inline", role = "form" }))
+                {
+
+                <textarea type="text" name="text" class="form-control" rows="3" cols="40">@Model.Comment</textarea><br />
+                <div class="row">
+                    <div class="col-xs-8 col-sm-2 col-md-2">
+                        <button type="submit" class="btn btn-success" id="btn-add">Change</button>
+                    </div>
+                    <div class="col-xs-4 col-sm-10 col-md-10">
+                        <button type="submit" class="btn btn-warning pull-left">
+                            @Ajax.ActionLink("Back", "PartialIndex",
+new AjaxOptions
+{
+    UpdateTargetId = "ajaxAddCommentOrDeleteId",
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "Get"
+})
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js "></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js "></script>
+@Scripts.Render("~/bundles/jqueryunob")
+@Scripts.Render("~/js/autocomplete")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#searchBy").autocomplete({
+            source: '@Url.Action("GetForumStuff")'
+        });
+    });
+</script>

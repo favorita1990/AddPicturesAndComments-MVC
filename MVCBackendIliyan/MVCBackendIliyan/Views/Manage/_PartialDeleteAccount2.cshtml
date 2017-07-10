@@ -1,0 +1,60 @@
+﻿@model MVCBackendIliyan.Models.ChangePasswordViewModel
+
+<div id="ajaxBackOrSaveId">
+    <script type="text/javascript">
+        document.title = 'Change Password';
+        window.history.pushState(
+            null,
+            null,
+            '/Manage/ChangePassword'
+            );
+    </script>
+    <h2 class="text-center text-success">Change Password Form</h2>
+
+    @using (Ajax.BeginForm("ChangePassword", "Manage", new AjaxOptions()
+    {
+        UpdateTargetId = "ajaxBackOrSaveId",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "Post"
+    },
+                                        new { @class = "form-horizontal", role = "form" }))
+    {
+    @Html.AntiForgeryToken()
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-xs-2 col-sm-2 col-md-2 control-label">Old Password:</div>
+            <div class="col-md-8">
+                @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control col-xs-8 col-sm-8 col-md-8" })
+            </div>
+        </div>
+                <div class="form-group">
+                    <div class="col-xs-2 col-sm-2 col-md-2 control-label">New Password:</div>
+                    <div class="col-md-8">
+                        @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control col-xs-8 col-sm-8 col-md-8" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2 col-sm-2 col-md-2 control-label">Confirm Password:</div>
+                    <div class="col-md-8">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control col-xs-8 col-sm-8 col-md-8" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-9 col-sm6 col-md-6">
+                        <input type="submit" value="Save" class="btn btn-success" />
+                    </div>
+                    <div class="col-xs-3 col-sm-6 col-md-6">
+                        <button type="button" class="btn btn-warning pull-left">
+                            @Ajax.ActionLink("Back", "PartialIndex",
+new AjaxOptions
+{
+    UpdateTargetId = "ajaxBackOrSaveId",
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "Get"
+})
+                        </button>
+                    </div>
+                </div>
+    }
+</div>

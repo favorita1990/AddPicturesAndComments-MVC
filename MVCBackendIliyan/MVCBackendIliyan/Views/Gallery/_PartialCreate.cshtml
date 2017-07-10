@@ -1,0 +1,54 @@
+﻿@model MVCBackendIliyan.Models.Gallery
+
+
+<div id="ajaxBackOrAddId">
+    <script type="text/javascript">
+        document.title = 'Gallery';
+        window.history.pushState(
+            null,
+            null,
+            '/Gallery/Create'
+            );
+    </script>
+    <h3>Create Photo</h3>
+    @using (Html.BeginForm("Create", "Gallery", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+    @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4 col-xs-10 col-sm-6">
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div><br />
+            @if (TempData["image"] != null)
+            {
+            <p class="text-center text-danger">@TempData["image"]</p>
+            }
+            <div class="col-md-4 col-xs-10 col-sm-6 text-center">
+                    @Html.TextBox("file", "", new { @class="btn btn-info", type = "file", accept = "image/x-png, image/gif, image/jpg" })
+                 <br /><br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn-success btn" value="Upload" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Ajax.ActionLink("Back to List", "PartialIndex",
+                      new AjaxOptions
+                      {
+                          UpdateTargetId = "ajaxBackOrAddId",
+                          InsertionMode = InsertionMode.Replace,
+                          HttpMethod = "Get"
+                      })
+    </div>
+</div>

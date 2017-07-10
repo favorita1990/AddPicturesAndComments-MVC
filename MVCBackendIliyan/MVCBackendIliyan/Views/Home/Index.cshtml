@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@ViewBag.Message' == "User was removed.")
+        {
+            toastr.success('@ViewBag.Message');
+        }
+        if ('@ViewBag.Message' != "" && '@ViewBag.Message' != "User was removed.")
+        {
+            toastr.info('@ViewBag.Message');
+        }
+    });
+</script>
+
+
+<div class="home">
+    <div class="home-text">
+        <h3>Home</h3><br /><br /><br />
+    </div>
+    <div class="home-info">
+        <div class="col-md-5 home-info-left">
+            <img src="~/Content/images/Minions.jpg" alt="" />
+        </div>
+        <div class="col-md-7 home-info-right">
+            <h4>Who am i? </h4>
+            <p>
+                My name is Iliyan Kodzhemanov and I am student third year information technology. I am from Gotse Delchev, but have born
+                in Sofia. A couple of years later I'm back to Sofia! I have lived in student town now.
+                I graduated from Technical university, electro energetics but that's not for me. So here I am :)
+            </p>
+        </div>
+        <div class="clearfix"> </div>
+        <br /><br />
+        <div class="pgs col-md-6">
+            <h3>Skills</h3>
+            <ul>
+                <li><a>c/c++</a></li>
+                <li><a>Java</a></li>
+                <li><a>C#</a></li>
+                <li><a>JavaScript</a></li>
+                <li><a>HTML</a></li>
+                <li><a>CSS</a></li>
+                <li><a>XML</a></li>
+                <li><a>MVC Framework – ASP.NET</a></li>
+                <li><a>Entity Framework</a></li>
+                <li><a>SQL Server</a></li>
+            </ul>
+            <br /><div><a> and more coming...</a></div>
+        </div>
+        <div class="clearfix"> </div>
+
+
+    </div>
+    <div class="home-grid">
+        <div class="col-md-4 home-text-info">
+            <h4>In free time</h4>
+            <p class="home-pgh">I like to travel around the world.</p>
+        </div>
+        <div class="col-md-4 home-text-info">
+            <h4>When I'm busy</h4>
+            <p class="home-pgh">I learn and raise my skills in back-end stuff.</p>
+        </div>
+        <div class="col-md-4 home-text-info">
+            <h4>Career</h4>
+            <p class="home-pgh">I still have two months as intership with c# but The best is yet to come...</p>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <br /><br />
+</div>

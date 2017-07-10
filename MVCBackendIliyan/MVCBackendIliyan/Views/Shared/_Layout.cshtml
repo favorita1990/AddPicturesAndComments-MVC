@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    @Html.Partial("~/Views/Shared/Partials/_PartialHeader.cshtml")
+   
+</head>
+<body>
+
+    <div class="banner-body">
+        <div class="container">
+
+            @Html.Partial("~/Views/Shared/Partials/_PartialControlNavigation.cshtml")
+
+            @RenderBody()
+
+        </div>
+    </div>
+
+    @Html.Partial("~/Views/Shared/Partials/_PartialFooter.cshtml")
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>

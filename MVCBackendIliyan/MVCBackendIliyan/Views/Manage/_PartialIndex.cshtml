@@ -1,0 +1,45 @@
+﻿@model MVCBackendIliyan.Models.IndexViewModel
+
+<div id="changePasswordId">
+    <script type="text/javascript">
+        document.title = 'Manage';
+        window.history.pushState(
+            null,
+            null,
+            '/Manage'
+            );
+    </script>
+
+    <p class="text-success">@ViewBag.StatusMessage</p>
+
+    <h2 class="text-center text-danger">Change your account settings</h2>
+
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>Password:</dt>
+            <dd>
+                [ @Ajax.ActionLink("Change your password", "PartialChangePassword",
+                      new AjaxOptions
+                      {
+                          UpdateTargetId = "changePasswordId",
+                          InsertionMode = InsertionMode.Replace,
+                          HttpMethod = "Get"
+                      }) ]
+            </dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Delete Account:</dt>
+            <dd>
+                [ @Ajax.ActionLink("Remove account", "PartialDeleteAccount",
+                      new AjaxOptions
+                      {
+                          UpdateTargetId = "changePasswordId",
+                          InsertionMode = InsertionMode.Replace,
+                          HttpMethod = "Get"
+                      }) ]
+            </dd>
+
+        </dl>
+    </div>
+</div>

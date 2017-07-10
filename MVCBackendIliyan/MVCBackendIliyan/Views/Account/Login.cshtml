@@ -1,0 +1,41 @@
+﻿@using MVCBackendIliyan.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+<div class="login">
+    <div class="login-grids">
+        <div class="col-md-6 log">
+            <h3>Login</h3>
+            <p>Welcome, please enter the following to continue.</p>
+            <br />
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+            {
+            @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <h5>User Name:</h5>
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                @Html.TextBoxFor(m => m.Email)
+                
+
+                <h5>Password:</h5>
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                @Html.PasswordFor(m => m.Password)
+               
+
+                <input type="submit" value="Login">
+
+            }
+        </div>
+        <div class="col-md-6 login-right">
+            <h3>New Registration</h3>
+            <p>If You don't have registration, You can do it from here ---></p>
+            <a href="@Url.Action("Register", "Account")" class="hvr-bounce-to-bottom button">Create An Account</a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

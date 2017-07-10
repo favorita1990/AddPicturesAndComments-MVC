@@ -1,0 +1,168 @@
+﻿@model IPagedList<MVCBackendIliyan.Models.Forum>
+@using PagedList;
+@using PagedList.Mvc;
+
+
+<div id="targetPagedListId">
+    <div id="ajaxAddCommentOrDeleteId">
+        <div id="sortId">
+            <script type="text/javascript">
+                document.title = 'Forum';
+                window.history.pushState(
+                    null,
+                    null,
+                    '/Forum'
+                    );
+
+                $(document).ready(function () {
+                    if ('@TempData["message"]' == "Removed Comment.") {
+                        toastr.error('@TempData["message"]');
+                    }
+                    if ('@TempData["message"]' == "Added Comment.") {
+                        toastr.success('@TempData["message"]');
+                    }
+                    if ('@TempData["message"]' == "Comment Changed.") {
+                        toastr.success('@TempData["message"]');
+                    }
+                });
+            </script>
+
+            @if (Request.IsAuthenticated)
+            {
+                using (Ajax.BeginForm("AddComment", "Forum", new AjaxOptions()
+                {
+                    UpdateTargetId = "ajaxAddCommentOrDeleteId",
+                    InsertionMode = InsertionMode.Replace,
+                    HttpMethod = "Post"
+                },
+                                                                                    new { @class = "form-inline", role = "form" }))
+                {
+                <div>
+                    <textarea type="text" name="text" placeholder="Text" class="form-control" rows="3" cols="40" required></textarea>
+                    <button type="submit" class="btn btn-info" id="btn-add">Add Comment</button>
+                </div><br />
+                }
+            }
+
+            @if (Model.Count() != 0)
+            {
+                using (Ajax.BeginForm("PartialIndex", "Forum", new AjaxOptions()
+                {
+                    UpdateTargetId = "ajaxAddCommentOrDeleteId",
+                    InsertionMode = InsertionMode.Replace,
+                    HttpMethod = "Get"
+                }))
+                {
+                <div>
+                    <div class="col-xs-11 col-sm-11 col-md-4 col-lg-4">
+                        <div class="form-group has-feedback">
+                            <input type="text" value="" name="searchBy" id="searchBy" placeholder="Search" class="form-control" />
+                            <span class="glyphicon glyphicon-search pull-right form-control-feedback" style="color:#0c98cf"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3">
+                        <input type="submit" value="Search" class="btn btn-info pull-left" />
+                    </div>
+                </div>
+                }
+                <br /><br /> <hr>
+
+                <div style="overflow-x:auto;">
+                    <table class="table">
+                        <thead>
+                            <tr class="bg-info">
+                                <th>Comment</th>
+                                <th>
+                                    @Ajax.ActionLink("Added(ASC/DESC)", "PartialIndex", new
+                               {
+                                   sortBy = ViewBag.AddedComment,
+                                   searchBy = Request.QueryString["searchBy"]
+                               },
+                new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "GET", UpdateTargetId = "sortId" })
+                                </th>
+                                <th>First name</th>
+                                <th>Last name</th>
+                                <th>E-mail</th>
+                                @if (Request.IsAuthenticated)
+                                {
+                                <th>Details</th>
+                                <th></th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                {
+                <tr class="bg-success">
+                    <th>@item.Comment</th>
+                    <th>@item.Time</th>
+                    <th>@item.User.FirstName</th>
+                    <th>@item.User.LastName</th>
+                    <th>@item.User.Email</th>
+                    @if (Request.IsAuthenticated)
+                    {
+                        if (ViewBag.UserId == item.UserId)
+                        {
+                        <th>
+                            @using (Ajax.BeginForm("DeleteComment", "Forum", new { id = item.Id }, new AjaxOptions()
+                            {
+                                UpdateTargetId = "ajaxAddCommentOrDeleteId",
+                                InsertionMode = InsertionMode.Replace,
+                                HttpMethod = "Post"
+                            },
+new { @class = "form-inline", role = "form" }))
+                            {
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            }
+                        </th>
+                        <th>
+                            @using (Ajax.BeginForm("PartialEdit", "Forum", new { id = item.Id }, new AjaxOptions()
+                            {
+                                UpdateTargetId = "ajaxAddCommentOrDeleteId",
+                                InsertionMode = InsertionMode.Replace,
+                                HttpMethod = "GET"
+                            },
+new { @class = "form-inline" }))
+                            {
+                            <button type="submit" class="btn btn-info">Update</button>
+                            }
+                        </th>
+                        }
+
+                    }
+                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <strong>
+                        @Html.PagedListPager(Model, page => Url.Action("PartialIndex", new
+                   {
+                       page,
+                       searchBy = Request["searchBy"],
+                       sortBy = Request["sortBy"]
+                   }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.Classic,
+        new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "Get",
+            UpdateTargetId = "targetPagedListId"
+        }))
+                    </strong>
+                </div>
+            }
+            else
+            {
+            <br />
+            <h2 class="text-center text-success">There is no comment yet.</h2>
+            <br />
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#searchBy").autocomplete({
+            source: '@Url.Action("GetForumStuff")'
+        });
+    });
+</script>

@@ -1,0 +1,137 @@
+﻿@model IPagedList<MVCBackendIliyan.Models.Gallery>
+@using PagedList;
+@using PagedList.Mvc;
+
+
+<div id="targetPagedListId">
+    <div id="createId">
+        <script type="text/javascript">
+            document.title = 'Gallery';
+            window.history.pushState(
+                null,
+                null,
+                '/Gallery'
+                );
+
+            $(document).ready(function () {
+                if ('@ViewBag.Message' == "Added Photo.") {
+                    toastr.success('@ViewBag.Message');
+                }
+                if ('@ViewBag.Message' == "Removed Photo.") {
+                    toastr.error('@ViewBag.Message');
+                }
+            });
+        </script>
+        <div class="home-text home-info">
+            <br />
+            @if (Request.IsAuthenticated)
+            {
+            <h4>
+                    @Ajax.ActionLink("Add Photo", "PartialCreate", "Gallery",
+                new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    HttpMethod = "GET",
+                    UpdateTargetId = "createId"
+                }, new { @class="btn btn-success"})
+
+            </h4>
+            }
+            else
+            {
+            <h4>You need to login to add photo!</h4>
+            }
+            <br /><br />
+        </div>
+
+        @if (Model.Count() == 0)
+        {
+        <br />
+        <h2 class="text-center text-success">There Are No Photos Yet.</h2>
+        <br />
+        }
+        else
+        {
+            using (Ajax.BeginForm("PartialIndex", "Gallery", new AjaxOptions()
+            {
+                UpdateTargetId = "createId",
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "Get"
+            }))
+            {
+            <div>
+                <div class="col-xs-11 col-sm-11 col-md-4 col-lg-4">
+                    <div class="form-group has-feedback">
+                        <input type="text" value="" name="searchBy" id="searchBy" placeholder="Search" class="form-control" />
+                        <span class="glyphicon glyphicon-search pull-right form-control-feedback" style="color:#0c98cf"></span>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3">
+                    <input type="submit" value="Search" class="btn btn-info pull-left" />
+                </div>
+            </div>
+            }
+            <button type="button" class="btn btn-info">
+                @Ajax.ActionLink("Added(ASC/DESC)", "PartialIndex", new
+           {
+               sortBy = ViewBag.AddedPhoto,
+               searchBy = Request.QueryString["searchBy"]
+           },
+                new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "GET", UpdateTargetId = "createId" })
+            </button>
+
+            <br /><br /> <hr>
+
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                    <h4>@item.Title</h4>
+                    <img class="" src="@Url.Content("~/Images/")@item.ImageUrl" alt="" style="height:180px; width:180px;" />
+                    <div><h4>@item.User.Email</h4></div>
+                    <div><h4>@item.Time</h4></div>
+                    @if (Request.IsAuthenticated)
+                    {
+                        if (ViewBag.UserId == item.UserId)
+                        {
+                        <div>
+                            @using (Ajax.BeginForm("Delete", "Gallery", new { id = item.Id }, new AjaxOptions()
+                            {
+                                UpdateTargetId = "createId",
+                                InsertionMode = InsertionMode.Replace,
+                                HttpMethod = "Post"
+                            }))
+                            {
+                            @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            }
+                        </div>
+                        }
+                    }
+                </div>
+                }
+            </div>
+            <strong>
+                @Html.PagedListPager(Model, page => Url.Action("PartialIndex", new
+           {
+               page,
+               searchBy = Request["searchBy"],
+               sortBy = Request["sortBy"]
+           }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.Classic,
+        new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "Get",
+            UpdateTargetId = "targetPagedListId"
+        }))
+            </strong>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#searchBy").autocomplete({
+            source: '@Url.Action("GetGalleryStuff")'
+        });
+    });
+</script>

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<MVCBackendIliyan.Models.Gallery>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Styles.Render("~/css/autocomplete")
+
+<div class="gallery">
+    @Html.Partial("~/Views/Gallery/_PartialIndex.cshtml")
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js "></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js "></script>
+@Scripts.Render("~/bundles/jqueryunob")
+@Scripts.Render("~/js/autocomplete")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#searchBy").autocomplete({
+            source: '@Url.Action("GetGalleryStuff")'
+        });
+    });
+</script>
